@@ -1,11 +1,9 @@
 package com.example.board.dto.board;
 
-import com.example.board.domain.Member;
-import com.example.board.domain.Reply;
+import com.example.board.dto.file.FileInfoDTO;
 import com.example.board.dto.reply.ReplyInfoDTO;
 import lombok.*;
 
-import javax.persistence.Column;
 import java.util.List;
 
 @Getter
@@ -28,4 +26,6 @@ public class BoardInfoDTO {
     private boolean isMyBoard;
     
     private List<ReplyInfoDTO> replyDTO;
+
+    private List<FileInfoDTO> fileDTO;
 }

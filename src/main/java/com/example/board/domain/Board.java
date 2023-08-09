@@ -29,4 +29,7 @@ public class Board extends  BaseEntity{
     @OneToMany(mappedBy = "board",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Reply> reply;
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Image> image;
+
 }

@@ -1,40 +1,37 @@
-package com.example.board.JpaTest;
+package com.example.board.CrueTest;
 
 import com.example.board.Repository.BoardRepository;
 import com.example.board.Repository.MemberRepository;
 import com.example.board.Repository.ReplyRepository;
 import com.example.board.domain.Board;
-import com.example.board.domain.Member;
 import com.example.board.domain.Reply;
-import lombok.AllArgsConstructor;
+import com.example.board.service.member.MemberService;
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
-
-public class CrudTest {
+@Log4j2
+public class ReplyTest {
 
     private BoardRepository boardRepository;
-    private MemberRepository memberRepository;
     private ReplyRepository replyRepository;
 
     @Autowired
-    public CrudTest(BoardRepository boardRepository,MemberRepository memberRepository,ReplyRepository replyRepository){
+    public ReplyTest(BoardRepository boardRepository,ReplyRepository replyRepository){
         this.boardRepository =boardRepository;
-        this.memberRepository = memberRepository;
         this.replyRepository=replyRepository;
     }
 
     @Test
-    public void registeMember(){
-        Member member = Member.builder().email("psy2173@").name("박세용").password("1234").build();
-        memberRepository.save(member);
-    }
+    public void addReply(){
+        Board board = boardRepository.findById(1).get();
 
+        Reply reply = Reply.builder().content("댓글테스트2").replyler("박세용").board(board).build();
+        log.info(reply);
+        replyRepository.save(reply);
+    }
 }

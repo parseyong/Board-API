@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-// 페이징에 사용되는 DTO, 기본적으로 한 페이지에 10개씩 보여준다.s
+// 페이징에 사용되는 DTO, 기본적으로 한 페이지에 10개씩 보여준다.
 public class PagingInfoDTO {
 
     private int pagingNum; // 현재 페이지 번호

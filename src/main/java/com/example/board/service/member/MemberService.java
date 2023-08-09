@@ -1,6 +1,7 @@
 package com.example.board.service.member;
 
 import com.example.board.Repository.MemberRepository;
+import com.example.board.domain.Board;
 import com.example.board.domain.Member;
 import com.example.board.dto.member.MemberDTO;
 import com.example.board.dto.member.MemberRegisterDTO;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -50,7 +52,9 @@ public class MemberService {
             throw new NotExistMemberException("회원이 존재하지 않습니다");
         }
         Member member =result.get();
+        member.getBoard().size();
         MemberDTO memberDTO = MemberDTO.builder().email(email).board(member.getBoard()).build();
+
         return memberDTO;
     }
 }

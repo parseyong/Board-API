@@ -44,7 +44,7 @@ public class MemberController {
 
     @GetMapping("/members/{email}")
     public ResponseEntity<Object> readMember(@PathVariable String email){
-
-        return ResponseEntity.ok().body(memberService.readMember(email));
+        MemberDTO memberDTO = memberService.readMember(email);
+        return ResponseEntity.ok().body(memberDTO);
     }
 }

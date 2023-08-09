@@ -20,7 +20,7 @@ public class Member extends  BaseEntity{
     @Column
     String password;
 
-    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Board> board;
 
 }

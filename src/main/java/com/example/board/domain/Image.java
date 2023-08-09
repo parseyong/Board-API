@@ -1,6 +1,9 @@
 package com.example.board.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -9,18 +12,19 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = "board")
-public class Reply extends  BaseEntity{
+public class Image {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int replyNum;
     @Column
-    String content;
+    private String savedName;
     @Column
-    String replyler;
+    private String originalName;
+    @Column
+    private String savedPath;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_boardNum")
     private Board board;
+
+
 }

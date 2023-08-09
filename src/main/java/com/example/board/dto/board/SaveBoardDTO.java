@@ -19,9 +19,6 @@ public class SaveBoardDTO {
 
     @NotEmpty
     @NotBlank
-    private int boardNum;
-    @NotEmpty
-    @NotBlank
     private String title;
     @NotEmpty
     @NotBlank
