@@ -1,9 +1,6 @@
 package com.example.board.dto.file;
 
 import lombok.*;
-import org.springframework.beans.factory.annotation.Value;
-
-import javax.persistence.Column;
 
 @Getter
 @Setter
@@ -13,4 +10,7 @@ import javax.persistence.Column;
 @ToString
 public class FileInfoDTO {
 
+    private String originName;
+
+    private String savedPath;
 }

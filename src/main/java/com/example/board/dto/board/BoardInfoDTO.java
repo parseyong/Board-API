@@ -25,7 +25,7 @@ public class BoardInfoDTO {
     
     private boolean isMyBoard;
     
-    private List<ReplyInfoDTO> replyDTO;
+    private List<ReplyInfoDTO> replysDTO;
 
-    private List<FileInfoDTO> fileDTO;
+    private List<String> filesPath;
 }
