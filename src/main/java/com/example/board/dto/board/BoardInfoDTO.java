@@ -22,10 +22,12 @@ public class BoardInfoDTO {
     private String content;
 
     private String name;
-    
+
+    private String email;
+
     private boolean isMyBoard;
     
-    private List<ReplyInfoDTO> replysDTO;
+    private List<ReplyInfoDTO> replyInfoDTOList;
 
-    private List<String> filesPath;
+    private List<String> filePathList;
 }

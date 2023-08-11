@@ -45,6 +45,7 @@ public class MemberService {
 
         memberRepository.save(member);
     }
+    //email정보를 통해 member정보를 읽어 memberDTO를 반환
     @Transactional
     public MemberDTO readMember(String email){
         Optional<Member> result = memberRepository.findById(email);
@@ -53,8 +54,11 @@ public class MemberService {
         }
         Member member =result.get();
         member.getBoard().size();
-        MemberDTO memberDTO = MemberDTO.builder().email(email).board(member.getBoard()).build();
-
+        MemberDTO memberDTO = MemberDTO.builder()
+                            .email(email)
+                            .boardList(member.getBoard())
+                            .name(member.getName())
+                            .build();
         return memberDTO;
     }
 }

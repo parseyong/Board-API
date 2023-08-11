@@ -6,4 +6,5 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 public interface ReplyRepository extends JpaRepository<Reply,Integer>,
         QuerydslPredicateExecutor<Reply> {
+
 }

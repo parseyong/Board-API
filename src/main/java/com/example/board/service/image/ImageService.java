@@ -61,9 +61,10 @@ public class ImageService {
         // 데이터베이스에 파일 정보 저장 , 기존파일명,저장경로,uuid명 을 필드로 가지는 엔티티를 db에 저장
         Image savedFile = imageRepository.save(fileInDatabase);
     }
-    public List<String> getFilePath(Board board){
+    public List<String> readImage(Board board){
         List<Image> fileList = board.getImage();
         List<String> filePathList = new ArrayList<>();
+
         for(int i=0;i<fileList.size();i++){
             filePathList.add(fileList.get(i).getSavedPath());
         }

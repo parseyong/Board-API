@@ -12,7 +12,7 @@ public class ReplyInfoDTO {
 
     private String content;
 
-    private String replyer;
+    private String replyler;
 
     private boolean isMyReply;
 
