@@ -11,5 +11,5 @@ public interface BoardMapper {
     BoardMapper INSTANCE = Mappers.getMapper(BoardMapper.class);
     Board boardInfoDTOToBoard(BoardInfoDTO boardInfoDTO);
 
-    BoardInfoDTO boardToBoardInfoDTO(Board board, Member member);
+    BoardInfoDTO boardToBoardInfoDTO(Board board);
 }

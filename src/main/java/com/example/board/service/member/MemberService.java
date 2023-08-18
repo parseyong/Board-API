@@ -10,6 +10,7 @@ import com.example.board.exception.NotExistMemberException;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -24,12 +25,14 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final EntityManager entityManager;
     private final JPAQueryFactory jpaQueryFactory;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public MemberService(MemberRepository memberRepository, EntityManager entityManager){
+    public MemberService(MemberRepository memberRepository, EntityManager entityManager,PasswordEncoder passwordEncoder){
         this.memberRepository =memberRepository;
         this.entityManager=entityManager;
         this.jpaQueryFactory=new JPAQueryFactory(this.entityManager);
+        this.passwordEncoder=passwordEncoder;
     }
 
     public void registeMember(MemberRegisterDTO memberRegisterDTO){
@@ -40,7 +43,8 @@ public class MemberService {
 
         Member member = Member.builder().email(memberRegisterDTO.getEmail())
                         .name(memberRegisterDTO.getName())
-                        .password(memberRegisterDTO.getPassword())
+                        .password(passwordEncoder.encode(memberRegisterDTO.getPassword()))
+                        .roleName(memberRegisterDTO.getRoleName())
                         .build();
 
         memberRepository.save(member);

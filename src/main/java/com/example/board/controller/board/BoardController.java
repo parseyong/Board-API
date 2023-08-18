@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.HashMap;
@@ -54,8 +55,8 @@ public class BoardController {
         return ResponseEntity.created(null).body("게시글 등록 완료");
     }
     @GetMapping("/boards")
-    public ResponseEntity<BoardInfoDTO> readBoard(@RequestBody ReadBoardDTO readBoardDTO){
-        BoardInfoDTO boardInfoDTO = boardService.readBoard(readBoardDTO);
+    public ResponseEntity<BoardInfoDTO> readBoard(@RequestBody ReadBoardDTO readBoardDTO, ServletRequest request){
+        BoardInfoDTO boardInfoDTO = boardService.readBoard(readBoardDTO,request);
         return ResponseEntity.ok().body(boardInfoDTO);
     }
 }

@@ -4,6 +4,7 @@ import com.example.board.Repository.ReplyRepository;
 import com.example.board.domain.Board;
 import com.example.board.domain.QReply;
 import com.example.board.domain.Reply;
+import com.example.board.dto.board.ReadBoardDTO;
 import com.example.board.dto.reply.ReplyInfoDTO;
 import com.example.board.mapper.ReplyMapper;
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
@@ -31,7 +32,7 @@ public class ReplyService {
         this.jpaQueryFactory=new JPAQueryFactory(this.entityManager);
     }
 
-    public List<ReplyInfoDTO> readReply(Board board){
+    public List<ReplyInfoDTO> readReply(Board board, ReadBoardDTO readBoardDTO){
 
         List<ReplyInfoDTO> replyInfoDTOList=new ArrayList<>();
         List<Reply> replyList = board.getReply();
@@ -39,7 +40,11 @@ public class ReplyService {
         for(int i=0;i< replyList.size();i++){
             Reply reply = replyList.get(i);
             ReplyInfoDTO replyInfoDTO= ReplyMapper.INSTANCE.replyToReplyInfoDTO(reply);
-            replyInfoDTO.setMyReply(true); // jwt를 통해 확인. 추후에 구현예정
+            if(board.getMember().getEmail().equals(readBoardDTO.getEmail()))
+                replyInfoDTO.setMyReply(true);
+            else
+                replyInfoDTO.setMyReply(false);
+
             replyInfoDTO.setReplyler(reply.getReplyler());
             replyInfoDTOList.add(replyInfoDTO);
         }

@@ -13,6 +13,7 @@ import com.example.board.dto.reply.ReplyInfoDTO;
 import com.example.board.exception.NotExistBoardException;
 import com.example.board.mapper.BoardMapper;
 import com.example.board.mapper.ReplyMapper;
+import com.example.board.security.JwtProvider;
 import com.example.board.service.image.ImageService;
 import com.example.board.service.member.MemberService;
 import com.example.board.service.reply.ReplyService;
@@ -23,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,9 +42,10 @@ public class BoardService {
     private final MemberService memberService;
     private final ImageService imageService;
     private final ReplyService replyService;
+    private final JwtProvider jwtProvider;
 
     @Autowired
-    public BoardService(BoardRepository boardRepository, EntityManager entityManager,
+    public BoardService(BoardRepository boardRepository, EntityManager entityManager,JwtProvider jwtProvider,
                         MemberService memberService, ImageService imageService, ReplyService replyService){
         this.boardRepository =boardRepository;
         this.entityManager=entityManager;
@@ -49,6 +53,7 @@ public class BoardService {
         this.memberService=memberService;
         this.imageService=imageService;
         this.replyService=replyService;
+        this.jwtProvider=jwtProvider;
     }
 
     public int addBoard(SaveBoardDTO saveBoardDTO) throws IOException {
@@ -64,24 +69,25 @@ public class BoardService {
         return savedBoard.getBoardNum();
     }
     @Transactional
-    public BoardInfoDTO readBoard(ReadBoardDTO readBoardDTO){
+    public BoardInfoDTO readBoard(ReadBoardDTO readBoardDTO,ServletRequest request){
         Optional<Board> result = boardRepository.findById(readBoardDTO.getBoardNum());
 
         if(result.isEmpty()){
             throw new NotExistBoardException("존재하지 않는 게시글입니다");
         }
         Board board = result.get();
-        Member member = board.getMember();
-
-        return boardToBoardInfoDTO(board,member,readBoardDTO);
+        board.getMember();
+        log.info(board.getMember().getName());
+        return boardToBoardInfoDTO(board,readBoardDTO,request);
     }
 
-    public BoardInfoDTO boardToBoardInfoDTO(Board board, Member member,ReadBoardDTO readBoardDTO){
+    public BoardInfoDTO boardToBoardInfoDTO(Board board,ReadBoardDTO readBoardDTO, ServletRequest request){
+        String token = jwtProvider.resolveToken((HttpServletRequest) request);
+        readBoardDTO.setEmail(jwtProvider.getUsername(token));
+        BoardInfoDTO boardInfoDTO = BoardMapper.INSTANCE.boardToBoardInfoDTO(board);
 
-        BoardInfoDTO boardInfoDTO = BoardMapper.INSTANCE.boardToBoardInfoDTO(board,member);
-
-        boardInfoDTO.setMyBoard(member.getEmail().equals(readBoardDTO.getEmail()));
-        boardInfoDTO.setReplyInfoDTOList(replyService.readReply(board));
+        boardInfoDTO.setMyBoard(board.getMember().getEmail().equals(readBoardDTO.getEmail()));
+        boardInfoDTO.setReplyInfoDTOList(replyService.readReply(board,readBoardDTO));
         boardInfoDTO.setFilePathList(imageService.readImage(board));
         return boardInfoDTO;
     }

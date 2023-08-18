@@ -2,14 +2,13 @@ package com.example.board.mapper;
 
 import com.example.board.domain.Board;
 import com.example.board.domain.Board.BoardBuilder;
-import com.example.board.domain.Member;
 import com.example.board.dto.board.BoardInfoDTO;
 import com.example.board.dto.board.BoardInfoDTO.BoardInfoDTOBuilder;
 import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-08-18T22:52:26+0900",
+    date = "2023-08-18T23:37:33+0900",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.16.1 (Oracle Corporation)"
 )
 public class BoardMapperImpl implements BoardMapper {
@@ -30,22 +29,16 @@ public class BoardMapperImpl implements BoardMapper {
     }
 
     @Override
-    public BoardInfoDTO boardToBoardInfoDTO(Board board, Member member) {
-        if ( board == null && member == null ) {
+    public BoardInfoDTO boardToBoardInfoDTO(Board board) {
+        if ( board == null ) {
             return null;
         }
 
         BoardInfoDTOBuilder boardInfoDTO = BoardInfoDTO.builder();
 
-        if ( board != null ) {
-            boardInfoDTO.boardNum( board.getBoardNum() );
-            boardInfoDTO.title( board.getTitle() );
-            boardInfoDTO.content( board.getContent() );
-        }
-        if ( member != null ) {
-            boardInfoDTO.name( member.getName() );
-            boardInfoDTO.email( member.getEmail() );
-        }
+        boardInfoDTO.boardNum( board.getBoardNum() );
+        boardInfoDTO.title( board.getTitle() );
+        boardInfoDTO.content( board.getContent() );
 
         return boardInfoDTO.build();
     }

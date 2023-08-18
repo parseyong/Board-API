@@ -44,7 +44,7 @@ public class MemberController {
         }
         String email = memberRegisterDTO.getEmail();
         memberService.registeMember(memberRegisterDTO);
-        return ResponseEntity.ok().body(memberRegisterDTO);
+        return ResponseEntity.created(null).body(memberRegisterDTO);
     }
     @GetMapping("/login")
     public ResponseEntity<Object> login(@RequestBody @Valid LoginDTO loginDTO){

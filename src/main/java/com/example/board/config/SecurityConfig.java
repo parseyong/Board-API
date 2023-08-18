@@ -33,9 +33,9 @@ public class SecurityConfig {
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/all","/admin").authenticated()
+                .antMatchers("/login","/members").permitAll()
                 .antMatchers("/manager").hasRole("MANAGER")
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
 
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
