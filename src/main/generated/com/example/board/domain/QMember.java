@@ -36,6 +36,8 @@ public class QMember extends EntityPathBase<Member> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regDate = _super.regDate;
 
+    public final StringPath roleName = createString("roleName");
+
     public QMember(String variable) {
         super(Member.class, forVariable(variable));
     }

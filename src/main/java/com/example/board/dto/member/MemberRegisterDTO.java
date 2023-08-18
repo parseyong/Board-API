@@ -22,4 +22,7 @@ public class MemberRegisterDTO {
     @NotEmpty
     @NotBlank
     private String password;
+    @NotEmpty
+    @NotBlank
+    private String roleName;
 }

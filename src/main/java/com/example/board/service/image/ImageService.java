@@ -4,8 +4,6 @@ import com.example.board.Repository.BoardRepository;
 import com.example.board.Repository.ImageRepository;
 import com.example.board.domain.Board;
 import com.example.board.domain.Image;
-import com.example.board.domain.Member;
-import com.example.board.service.board.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
