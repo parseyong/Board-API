@@ -32,4 +32,8 @@ public class Board extends  BaseEntity{
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Image> image;
 
+    public void addMember(Member member){
+        this.member=member;
+    }
+
 }

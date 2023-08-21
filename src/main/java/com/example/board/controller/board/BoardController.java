@@ -59,4 +59,8 @@ public class BoardController {
         BoardInfoDTO boardInfoDTO = boardService.readBoard(readBoardDTO,request);
         return ResponseEntity.ok().body(boardInfoDTO);
     }
+    @GetMapping("/boards/{boardNum}")
+    public ResponseEntity<Object> readPreviewBoard(@PathVariable int boardNum){
+        return ResponseEntity.ok().body(boardService.readPreviewBoard(boardNum));
+    }
 }

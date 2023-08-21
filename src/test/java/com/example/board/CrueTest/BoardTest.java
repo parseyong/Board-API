@@ -28,8 +28,13 @@ public class BoardTest {
     @Test
     public void addBoard(){
         Member member = memberRepository.findById("psy2173@").get();
-        Board board = Board.builder().title("1").content("test").member(member).build();
-        boardRepository.save(board);
+        for(int i=0;i<500;i++){
+            Board board = Board.builder().title("1:"+i).content("test"+i).member(member).build();
+            boardRepository.save(board);
+        }
+
+
+
         log.info("sucess addBoard");
     }
 
