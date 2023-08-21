@@ -32,8 +32,7 @@ public class MemberTest {
 
     @Test
     public void readMember(){
-        MemberDTO member =memberService.readMember("psy2173@");
-        System.out.println(member);
+        memberRepository.deleteById("psy2173@");
     }
 
 }

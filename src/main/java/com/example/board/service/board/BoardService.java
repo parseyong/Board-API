@@ -81,9 +81,8 @@ public class BoardService {
         return boardToBoardInfoDTO(board,readBoardDTO,request);
     }
 
-    public BoardInfoDTO boardToBoardInfoDTO(Board board,ReadBoardDTO readBoardDTO, ServletRequest request){
-        String token = jwtProvider.resolveToken((HttpServletRequest) request);
-        readBoardDTO.setEmail(jwtProvider.getUsername(token));
+    public BoardInfoDTO boardToBoardInfoDTO(Board board,ReadBoardDTO readBoardDTO,ServletRequest request){
+        readBoardDTO.setEmail(memberService.readMemberByToken(request));
         BoardInfoDTO boardInfoDTO = BoardMapper.INSTANCE.boardToBoardInfoDTO(board);
 
         boardInfoDTO.setMyBoard(board.getMember().getEmail().equals(readBoardDTO.getEmail()));

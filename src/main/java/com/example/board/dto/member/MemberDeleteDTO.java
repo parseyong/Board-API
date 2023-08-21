@@ -11,18 +11,12 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class MemberRegisterDTO {
-
+public class MemberDeleteDTO {
     @NotEmpty
     @NotBlank
     private String email;
     @NotEmpty
     @NotBlank
-    private String name;
-    @NotEmpty
-    @NotBlank
     private String password;
-    @NotEmpty
-    @NotBlank
-    private String roleName;
+
 }
