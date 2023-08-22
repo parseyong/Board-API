@@ -3,23 +3,22 @@ package com.example.board.service.member;
 import com.example.board.Repository.MemberRepository;
 import com.example.board.domain.Board;
 import com.example.board.domain.Member;
-import com.example.board.dto.member.MemberDTO;
+import com.example.board.dto.member.MemberInfoDTO;
 import com.example.board.dto.member.MemberDeleteDTO;
 import com.example.board.dto.member.MemberSaveDTO;
 import com.example.board.exception.DuplicatedEmailException;
 import com.example.board.exception.NotExistMemberException;
 import com.example.board.exception.PasswordIsNotMatchException;
 import com.example.board.security.JwtProvider;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,17 +27,12 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final EntityManager entityManager;
-    private final JPAQueryFactory jpaQueryFactory;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
 
     @Autowired
-    public MemberService(MemberRepository memberRepository, EntityManager entityManager,PasswordEncoder passwordEncoder,
-                         JwtProvider jwtProvider){
+    public MemberService(MemberRepository memberRepository,PasswordEncoder passwordEncoder, JwtProvider jwtProvider){
         this.memberRepository =memberRepository;
-        this.entityManager=entityManager;
-        this.jpaQueryFactory=new JPAQueryFactory(this.entityManager);
         this.passwordEncoder=passwordEncoder;
         this.jwtProvider=jwtProvider;
     }
@@ -69,18 +63,23 @@ public class MemberService {
     }
     //jwt토큰에서 회원정보를 가져오는 메소드
     @Transactional
-    public MemberDTO readMember(String email){
+    public MemberInfoDTO readMember(String email){
         Optional<Member> result = memberRepository.findById(email);
-        if(!result.isPresent()){
+        if(result.isEmpty()){
             throw new NotExistMemberException("회원이 존재하지 않습니다");
         }
         Member member =result.get();
-        member.getBoard().size();
-        MemberDTO memberDTO = MemberDTO.builder()
+        List<Board> boardList = member.getBoard();
+        List<String> titleList= new ArrayList<>();
+        for(int i=0;i<boardList.size();i++){
+            titleList.add(boardList.get(i).getTitle());
+        }
+        MemberInfoDTO memberDTO = MemberInfoDTO.builder()
                             .email(email)
-                            .boardList(member.getBoard())
+                            .boardList(titleList)
                             .name(member.getName())
                             .build();
+        log.info(memberDTO);
         return memberDTO;
     }
     @Transactional

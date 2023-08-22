@@ -2,14 +2,11 @@ package com.example.board.CrueTest;
 
 import com.example.board.Repository.BoardRepository;
 import com.example.board.Repository.MemberRepository;
-import com.example.board.dto.member.MemberDTO;
 import com.example.board.domain.Member;
 import com.example.board.service.member.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import javax.transaction.Transactional;
 
 @SpringBootTest
 public class MemberTest {

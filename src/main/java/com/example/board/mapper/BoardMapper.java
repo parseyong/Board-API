@@ -15,6 +15,7 @@ public interface BoardMapper {
     @Mapping(source = "member.name",target = "name")
     @Mapping(source = "member.email",target = "email")
     BoardInfoDTO boardToBoardInfoDTO(Board board);
-
+    @Mapping(source = "member.name", target = "name")
     PreviewBoardDTO boardToPreviewBoardDTO(Board board);
+
 }

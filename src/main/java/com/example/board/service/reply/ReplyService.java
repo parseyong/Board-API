@@ -36,7 +36,6 @@ public class ReplyService {
 
         List<ReplyInfoDTO> replyInfoDTOList=new ArrayList<>();
         List<Reply> replyList = board.getReply();
-
         for(int i=0;i< replyList.size();i++){
             Reply reply = replyList.get(i);
             ReplyInfoDTO replyInfoDTO= ReplyMapper.INSTANCE.replyToReplyInfoDTO(reply);

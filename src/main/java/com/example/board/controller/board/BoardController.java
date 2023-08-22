@@ -1,9 +1,7 @@
 package com.example.board.controller.board;
 
-import com.example.board.dto.board.BoardInfoDTO;
-import com.example.board.dto.board.DeleteBoardDTO;
-import com.example.board.dto.board.ReadBoardDTO;
-import com.example.board.dto.board.SaveBoardDTO;
+import com.example.board.dto.board.*;
+import com.example.board.exception.NotExistFileException;
 import com.example.board.service.board.BoardService;
 import com.example.board.service.image.ImageService;
 import lombok.extern.log4j.Log4j2;
@@ -37,7 +35,7 @@ public class BoardController {
         받은 pk값과 파일을통해 이미지를 업로드한다.
      */
     @PostMapping("/boards")
-    public ResponseEntity<Object> addBoardContent(@RequestBody @Valid SaveBoardDTO saveBoardDTO, BindingResult bindingResult) throws IOException {
+    public ResponseEntity<Object> addBoardContent(@RequestBody @Valid SaveBoardDTO saveBoardDTO, BindingResult bindingResult,ServletRequest request) throws IOException {
 
         if (bindingResult.hasErrors()) {
             // 에러 정보를 Map에 담아서 응답으로 반환
@@ -46,32 +44,50 @@ public class BoardController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        int boardNum = boardService.addBoard(saveBoardDTO);
+        int boardNum = boardService.saveBoard(saveBoardDTO,request);
         return ResponseEntity.created(null).body(boardNum);
     }
     @PostMapping("/boards/images")
     public ResponseEntity<Object> addBoardImage(@RequestParam("file") MultipartFile file,
                                                 @RequestParam("boardNum") int boardNum) throws IOException {
+        //이 요청은 저장할 파일이 있을때만 요청되야한다.
+        if(file.isEmpty())
+            throw new NotExistFileException("저장할 파일이없습니다.");
         imageService.saveImage(file,boardNum);
         return ResponseEntity.created(null).body("게시글 등록 완료");
     }
-    @GetMapping("/boards")
-    public ResponseEntity<BoardInfoDTO> readBoard(@RequestBody ReadBoardDTO readBoardDTO, ServletRequest request){
+    @GetMapping("/boards/{boardNum}")
+    public ResponseEntity<Object> readBoard(@PathVariable int boardNum, ServletRequest request){
+
+        ReadBoardDTO readBoardDTO = ReadBoardDTO.builder()
+                .boardNum(boardNum)
+                .build();
         BoardInfoDTO boardInfoDTO = boardService.readBoard(readBoardDTO,request);
         return ResponseEntity.ok().body(boardInfoDTO);
     }
-    @GetMapping("/boards/{boardNum}")
-    public ResponseEntity<Object> readPreviewBoard(@PathVariable int boardNum){
-        return ResponseEntity.ok().body(boardService.readPreviewBoard(boardNum));
+    @GetMapping("/boards/pages/{pageNum}")
+    public ResponseEntity<Object> readPreviewBoard(@PathVariable int pageNum){
+        return ResponseEntity.ok().body(boardService.readPreviewBoard(pageNum));
     }
-    @DeleteMapping("/boards")
-    public ResponseEntity<Object> deleteBoard(@RequestBody int boardNum){
+    @DeleteMapping("/boards/{boardNum}")
+    public ResponseEntity<Object> deleteBoard(@PathVariable int boardNum){
         boardService.deleteBoard(boardNum);
         return ResponseEntity.ok().body("삭제가 완료되었습니다.");
     }
-    @PutMapping("/boards")
-    public ResponseEntity<Object> updateBoard(@RequestBody SaveBoardDTO saveBoardDTO, ServletRequest request){
-        //boardService.deleteBoard(deleteBoardDTO,request);
-        return ResponseEntity.ok().body("삭제가 완료되었습니다.");
+    @PatchMapping("/boards/{boardNum}")
+    public ResponseEntity<Object> updateBoard(@PathVariable int boardNum ,@RequestBody @Valid UpdateBoardDTO updateBoardDTO,
+                                              BindingResult bindingResult, ServletRequest request){
+        if (bindingResult.hasErrors()) {
+            // 에러 정보를 Map에 담아서 응답으로 반환
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+            return ResponseEntity.badRequest().body(errors);
+        }
+        updateBoardDTO.setBoardNum(boardNum);
+        boardService.updateBoard(updateBoardDTO,request);
+        ReadBoardDTO readBoardDTO = ReadBoardDTO.builder()
+                    .boardNum(boardNum)
+                    .build();
+        return ResponseEntity.ok().body(boardService.readBoard(readBoardDTO,request));
     }
 }

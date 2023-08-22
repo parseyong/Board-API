@@ -11,7 +11,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-08-22T00:34:29+0900",
+    date = "2023-08-22T21:02:42+0900",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 11.0.16.1 (Oracle Corporation)"
 )
 public class BoardMapperImpl implements BoardMapper {
@@ -56,6 +56,7 @@ public class BoardMapperImpl implements BoardMapper {
 
         PreviewBoardDTOBuilder previewBoardDTO = PreviewBoardDTO.builder();
 
+        previewBoardDTO.name( boardMemberName( board ) );
         previewBoardDTO.boardNum( board.getBoardNum() );
         previewBoardDTO.title( board.getTitle() );
 

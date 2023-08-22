@@ -13,8 +13,6 @@ import javax.validation.constraints.NotEmpty;
 @ToString
 public class MemberSaveDTO {
 
-    @NotEmpty
-    @NotBlank
     private String email;
     @NotEmpty
     @NotBlank

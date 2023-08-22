@@ -1,6 +1,4 @@
 package com.example.board.dto.member;
-
-import com.example.board.domain.Board;
 import lombok.*;
 
 import java.util.List;
@@ -11,8 +9,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class MemberDTO {
+public class MemberInfoDTO {
     private String email;
     private String name;
-    private List<Board> boardList;
+    private List<String> boardList;
 }

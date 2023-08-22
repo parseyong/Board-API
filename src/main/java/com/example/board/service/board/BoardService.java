@@ -1,6 +1,7 @@
 package com.example.board.service.board;
 
 import com.example.board.Repository.BoardRepository;
+import com.example.board.Repository.MemberRepository;
 import com.example.board.domain.Board;
 import com.example.board.domain.Member;
 import com.example.board.domain.QBoard;
@@ -33,13 +34,14 @@ public class BoardService {
     private final EntityManager entityManager;
     private final JPAQueryFactory jpaQueryFactory;
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
     private final ImageService imageService;
     private final ReplyService replyService;
     private final PagingService pagingService;
 
     @Autowired
     public BoardService(BoardRepository boardRepository, EntityManager entityManager, MemberService memberService,
-                        ImageService imageService, ReplyService replyService,PagingService pagingService){
+                        ImageService imageService, ReplyService replyService,PagingService pagingService,MemberRepository memberRepository){
         this.boardRepository =boardRepository;
         this.entityManager=entityManager;
         this.jpaQueryFactory=new JPAQueryFactory(this.entityManager);
@@ -47,10 +49,12 @@ public class BoardService {
         this.imageService=imageService;
         this.replyService=replyService;
         this.pagingService=pagingService;
+        this.memberRepository=memberRepository;
     }
 
-    public int addBoard(SaveBoardDTO saveBoardDTO){
-        Member member = Member.builder().email(saveBoardDTO.getEmail()).build();
+    public int saveBoard(SaveBoardDTO saveBoardDTO,ServletRequest request){
+        String email = memberService.readMemberByToken(request);
+        Member member = memberRepository.findById(email).get();
 
         Board board = Board.builder()
                 .content(saveBoardDTO.getContent())
@@ -69,6 +73,7 @@ public class BoardService {
         }
         Board board = result.get();
         board.getMember();
+        log.info(board);
         return boardToBoardInfoDTO(board,readBoardDTO,request);
     }
     public BoardInfoDTO boardToBoardInfoDTO(Board board,ReadBoardDTO readBoardDTO,ServletRequest request){
@@ -78,8 +83,19 @@ public class BoardService {
         boardInfoDTO.setMyBoard(board.getMember().getEmail().equals(readBoardDTO.getEmail()));
         boardInfoDTO.setReplyInfoDTOList(replyService.readReply(board,readBoardDTO));
         boardInfoDTO.setFilePathList(imageService.readImage(board));
-        log.info(boardInfoDTO);
+
         return boardInfoDTO;
+    }
+    public List<PreviewBoardDTO> boardToPreviewBoardDTO(List<Board> boardList){
+        List<PreviewBoardDTO> previewBoardDTOList=new ArrayList<>();
+        for(int i=0;i< boardList.size();i++){
+            Board board = boardList.get(i);
+            PreviewBoardDTO previewBoardDTO = BoardMapper.INSTANCE.boardToPreviewBoardDTO(board);
+
+            previewBoardDTO.setReplyCnt(board.getReply().size());
+            previewBoardDTOList.add(previewBoardDTO);
+        }
+        return  previewBoardDTOList;
     }
     @Transactional
     public PagingRequestDTO readPreviewBoard(int pageNum){
@@ -92,18 +108,28 @@ public class BoardService {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-        List<PreviewBoardDTO> previewBoardDTOList=new ArrayList<>();
-        for(int i=0;i< result.size();i++){
-            Board board = result.get(i);
-            PreviewBoardDTO previewBoardDTO = BoardMapper.INSTANCE.boardToPreviewBoardDTO(board);
-            previewBoardDTO.setName(board.getMember().getName());
-            previewBoardDTO.setReplyCnt(board.getReply().size());
-            previewBoardDTOList.add(previewBoardDTO);
-        }
+        List<PreviewBoardDTO> previewBoardDTOList=boardToPreviewBoardDTO(result);
+
         pagingRequestDTO.setPreviewBoardDTOList(previewBoardDTOList);
         return pagingRequestDTO;
     }
     public void deleteBoard(int boardNum){
         boardRepository.deleteById(boardNum);
     }
+    @Transactional
+    public int updateBoard(UpdateBoardDTO updateBoardDTO, ServletRequest request){
+
+        String email = memberService.readMemberByToken(request);
+        Member member = memberRepository.findById(email).get();
+
+        Board board = Board.builder()
+                .content(updateBoardDTO.getContent())
+                .title(updateBoardDTO.getTitle())
+                .member(member)
+                .boardNum(updateBoardDTO.getBoardNum())
+                .build();
+        Board savedBoard =boardRepository.save(board);
+        return savedBoard.getBoardNum();
+    }
+
 }

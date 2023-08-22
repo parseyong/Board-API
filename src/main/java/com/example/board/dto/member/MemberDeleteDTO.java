@@ -12,8 +12,7 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 @ToString
 public class MemberDeleteDTO {
-    @NotEmpty
-    @NotBlank
+
     private String email;
     @NotEmpty
     @NotBlank

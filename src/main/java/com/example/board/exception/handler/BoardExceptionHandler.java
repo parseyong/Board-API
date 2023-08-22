@@ -1,9 +1,6 @@
 package com.example.board.exception.handler;
 
-import com.example.board.exception.InvalidBoardDeleteException;
-import com.example.board.exception.NotExistBoardException;
-import com.example.board.exception.NotExistMemberException;
-import com.example.board.exception.NotExistPageException;
+import com.example.board.exception.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -21,6 +18,10 @@ public class BoardExceptionHandler {
     }
     @ExceptionHandler(InvalidBoardDeleteException.class)
     public ResponseEntity<ErrorMsg> canNotDeletePage(InvalidBoardDeleteException ex){
+        return ResponseEntity.badRequest().body(new ErrorMsg(ex.getMessage()));
+    }
+    @ExceptionHandler(NotExistFileException.class)
+    public ResponseEntity<ErrorMsg> notExistFile(NotExistFileException ex){
         return ResponseEntity.badRequest().body(new ErrorMsg(ex.getMessage()));
     }
 }
