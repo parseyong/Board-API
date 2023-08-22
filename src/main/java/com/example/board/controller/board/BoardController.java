@@ -4,12 +4,12 @@ import com.example.board.dto.board.*;
 import com.example.board.exception.NotExistFileException;
 import com.example.board.service.board.BoardService;
 import com.example.board.service.image.ImageService;
+import javassist.tools.web.BadHttpRequest;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletRequest;
 import javax.validation.Valid;
@@ -22,11 +22,9 @@ import java.util.Map;
 public class BoardController {
 
     private final BoardService boardService;
-    private final ImageService imageService;
     @Autowired
-    public BoardController(BoardService boardService, ImageService imageService){
+    public BoardController(BoardService boardService){
         this.boardService=boardService;
-        this.imageService=imageService;
     }
     /*
         더욱 rest한 api를 만들기 위해 이미지업로드와 게시글 등록로직을 분리하여 처리하였다.
@@ -46,15 +44,6 @@ public class BoardController {
 
         int boardNum = boardService.saveBoard(saveBoardDTO,request);
         return ResponseEntity.created(null).body(boardNum);
-    }
-    @PostMapping("/boards/images")
-    public ResponseEntity<Object> addBoardImage(@RequestParam("file") MultipartFile file,
-                                                @RequestParam("boardNum") int boardNum) throws IOException {
-        //이 요청은 저장할 파일이 있을때만 요청되야한다.
-        if(file.isEmpty())
-            throw new NotExistFileException("저장할 파일이없습니다.");
-        imageService.saveImage(file,boardNum);
-        return ResponseEntity.created(null).body("게시글 등록 완료");
     }
     @GetMapping("/boards/{boardNum}")
     public ResponseEntity<Object> readBoard(@PathVariable int boardNum, ServletRequest request){

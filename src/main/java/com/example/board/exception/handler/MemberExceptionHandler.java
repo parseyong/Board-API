@@ -20,7 +20,7 @@ public class MemberExceptionHandler {
 
     @ExceptionHandler(NotExistMemberException.class)
     public ResponseEntity<ErrorMsg> notExistMember(NotExistMemberException ex){
-        return ResponseEntity.badRequest().body(new ErrorMsg(ex.getMessage()));
+        return ResponseEntity.status(404).body(new ErrorMsg(ex.getMessage()));
     }
 
     @ExceptionHandler(PasswordIsNotMatchException.class)

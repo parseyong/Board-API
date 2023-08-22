@@ -1,6 +1,5 @@
 package com.example.board.controller.member;
 
-import com.example.board.Repository.MemberRepository;
 import com.example.board.dto.login.LoginDTO;
 import com.example.board.dto.member.MemberInfoDTO;
 import com.example.board.dto.member.MemberDeleteDTO;
@@ -13,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,14 +21,11 @@ import java.util.Map;
 @Log4j2
 public class MemberController {
 
-    private final MemberRepository memberRepository;
     private final MemberService memberService;
     private final LoginService loginService;
 
     @Autowired
-    public MemberController(MemberRepository memberRepository,MemberService memberService,
-                            LoginService loginService){
-        this.memberRepository=memberRepository;
+    public MemberController(MemberService memberService, LoginService loginService){
         this.memberService=memberService;
         this.loginService=loginService;
     }
@@ -57,10 +54,10 @@ public class MemberController {
         return ResponseEntity.ok().body(token);
     }
     @GetMapping("/members/{email}")
-    public ResponseEntity<Object> readMember(@PathVariable String email){
+    public ResponseEntity<Object> readMember(@PathVariable String email, ServletRequest request){
 
-        MemberInfoDTO memberDTO = memberService.readMember(email);
-        return ResponseEntity.ok().body(memberDTO);
+        MemberInfoDTO memberInfoDTO = memberService.readMember(email,request);
+        return ResponseEntity.ok().body(memberInfoDTO);
     }
     @DeleteMapping("/members/{email}")
     public ResponseEntity<Object> deleteMember(@PathVariable String email,@RequestBody @Valid MemberDeleteDTO memberDeleteDTO,

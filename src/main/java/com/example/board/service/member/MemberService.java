@@ -7,6 +7,7 @@ import com.example.board.dto.member.MemberInfoDTO;
 import com.example.board.dto.member.MemberDeleteDTO;
 import com.example.board.dto.member.MemberSaveDTO;
 import com.example.board.exception.DuplicatedEmailException;
+import com.example.board.exception.InvalidReadMemberException;
 import com.example.board.exception.NotExistMemberException;
 import com.example.board.exception.PasswordIsNotMatchException;
 import com.example.board.security.JwtProvider;
@@ -63,7 +64,11 @@ public class MemberService {
     }
     //jwt토큰에서 회원정보를 가져오는 메소드
     @Transactional
-    public MemberInfoDTO readMember(String email){
+    public MemberInfoDTO readMember(String email,ServletRequest request){
+        if(!email.equals(readMemberByToken(request))){
+            throw new InvalidReadMemberException("회원정보를 읽기위한 권한이 없습니다.");
+        }
+
         Optional<Member> result = memberRepository.findById(email);
         if(result.isEmpty()){
             throw new NotExistMemberException("회원이 존재하지 않습니다");

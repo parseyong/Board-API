@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -12,10 +11,10 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class SaveReplyDTO {
+public class UpdateReplyDTO {
     @NotBlank
     @NotEmpty
     private String content;
 
-    private int boardNum;
+    private int replyNum;
 }

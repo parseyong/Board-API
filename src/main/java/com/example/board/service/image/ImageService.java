@@ -4,6 +4,8 @@ import com.example.board.Repository.BoardRepository;
 import com.example.board.Repository.ImageRepository;
 import com.example.board.domain.Board;
 import com.example.board.domain.Image;
+import com.example.board.dto.image.ImageDTO;
+import com.example.board.exception.NotExistBoardException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -31,8 +34,10 @@ public class ImageService {
     }
     public void saveImage(MultipartFile file, int boardNum) throws IOException {
 
-        Board board = boardRepository.findById(boardNum).get();
-
+        Optional<Board> result = boardRepository.findById(boardNum);
+        if(result.isEmpty())
+            throw new NotExistBoardException("존재하지 않는 게시글입니다.");
+        Board board = result.get();
         // 원래 파일 이름 추출
         String originName = file.getOriginalFilename();
 
@@ -58,13 +63,21 @@ public class ImageService {
         // 데이터베이스에 파일 정보 저장 , 기존파일명,저장경로,uuid명 을 필드로 가지는 엔티티를 db에 저장
         Image savedFile = imageRepository.save(fileInDatabase);
     }
-    public List<String> readImage(Board board){
-        List<Image> fileList = board.getImage();
-        List<String> filePathList = new ArrayList<>();
+    public List<ImageDTO> readImage(Board board){
+        List<Image> imageList = board.getImage();
+        List<ImageDTO> imageDTOList = new ArrayList<>();
 
-        for(int i=0;i<fileList.size();i++){
-            filePathList.add(fileList.get(i).getSavedPath());
+        for(int i=0;i<imageList.size();i++){
+            Image image = imageList.get(i);
+            ImageDTO fileDTO = ImageDTO.builder()
+                    .savedimageName(image.getSavedName())
+                    .imagePath(image.getSavedPath())
+                    .build();
+            imageDTOList.add(fileDTO);
         }
-        return filePathList;
+        return imageDTOList;
+    }
+    public void deleteImage(String savedImageName){
+        imageRepository.deleteById(savedImageName);
     }
 }

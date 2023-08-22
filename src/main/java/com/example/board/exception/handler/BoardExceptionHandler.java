@@ -10,7 +10,7 @@ public class BoardExceptionHandler {
 
     @ExceptionHandler(NotExistBoardException.class)
     public ResponseEntity<ErrorMsg> notExistBoard(NotExistBoardException ex){
-        return ResponseEntity.badRequest().body(new ErrorMsg(ex.getMessage()));
+        return ResponseEntity.status(404).body(new ErrorMsg(ex.getMessage()));
     }
     @ExceptionHandler(NotExistPageException.class)
     public ResponseEntity<ErrorMsg> notExistPage(NotExistPageException ex){
@@ -22,6 +22,10 @@ public class BoardExceptionHandler {
     }
     @ExceptionHandler(NotExistFileException.class)
     public ResponseEntity<ErrorMsg> notExistFile(NotExistFileException ex){
-        return ResponseEntity.badRequest().body(new ErrorMsg(ex.getMessage()));
+        return ResponseEntity.status(404).body(new ErrorMsg(ex.getMessage()));
+    }
+    @ExceptionHandler(NotExistReplyException.class)
+    public ResponseEntity<ErrorMsg> notExistReply(NotExistReplyException ex){
+        return ResponseEntity.status(404).body(new ErrorMsg(ex.getMessage()));
     }
 }

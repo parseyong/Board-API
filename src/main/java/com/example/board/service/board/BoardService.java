@@ -8,6 +8,7 @@ import com.example.board.domain.QBoard;
 import com.example.board.dto.board.*;
 import com.example.board.dto.paging.PagingRequestDTO;
 import com.example.board.exception.NotExistBoardException;
+import com.example.board.exception.NotExistMemberException;
 import com.example.board.mapper.BoardMapper;
 import com.example.board.service.image.ImageService;
 import com.example.board.service.member.MemberService;
@@ -54,8 +55,11 @@ public class BoardService {
 
     public int saveBoard(SaveBoardDTO saveBoardDTO,ServletRequest request){
         String email = memberService.readMemberByToken(request);
-        Member member = memberRepository.findById(email).get();
+        Optional<Member> result = memberRepository.findById(email);
+        if(result.isEmpty())
+            throw new NotExistMemberException("존재하지 않는 회원입니다.");
 
+        Member member = result.get();
         Board board = Board.builder()
                 .content(saveBoardDTO.getContent())
                 .title(saveBoardDTO.getTitle())
@@ -82,7 +86,7 @@ public class BoardService {
 
         boardInfoDTO.setMyBoard(board.getMember().getEmail().equals(readBoardDTO.getEmail()));
         boardInfoDTO.setReplyInfoDTOList(replyService.readReply(board,readBoardDTO));
-        boardInfoDTO.setFilePathList(imageService.readImage(board));
+        boardInfoDTO.setImageDTOList(imageService.readImage(board));
 
         return boardInfoDTO;
     }
@@ -120,8 +124,10 @@ public class BoardService {
     public int updateBoard(UpdateBoardDTO updateBoardDTO, ServletRequest request){
 
         String email = memberService.readMemberByToken(request);
-        Member member = memberRepository.findById(email).get();
-
+        Optional<Member> result = memberRepository.findById(email);
+        if(result.isEmpty())
+            throw new NotExistMemberException("존재하지 않는 회원입니다.");
+        Member member = result.get();
         Board board = Board.builder()
                 .content(updateBoardDTO.getContent())
                 .title(updateBoardDTO.getTitle())

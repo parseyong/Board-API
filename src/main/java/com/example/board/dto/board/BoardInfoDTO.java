@@ -1,5 +1,6 @@
 package com.example.board.dto.board;
 
+import com.example.board.dto.image.ImageDTO;
 import com.example.board.dto.reply.ReplyInfoDTO;
 import lombok.*;
 
@@ -28,5 +29,5 @@ public class BoardInfoDTO {
     
     private List<ReplyInfoDTO> replyInfoDTOList;
 
-    private List<String> filePathList;
+    private List<ImageDTO> imageDTOList;
 }
