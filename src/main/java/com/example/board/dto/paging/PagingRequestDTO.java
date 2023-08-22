@@ -1,5 +1,6 @@
-package com.example.board.dto.board;
+package com.example.board.dto.paging;
 
+import com.example.board.dto.board.PreviewBoardDTO;
 import lombok.*;
 
 import java.util.List;

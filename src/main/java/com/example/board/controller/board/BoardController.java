@@ -1,6 +1,7 @@
 package com.example.board.controller.board;
 
 import com.example.board.dto.board.BoardInfoDTO;
+import com.example.board.dto.board.DeleteBoardDTO;
 import com.example.board.dto.board.ReadBoardDTO;
 import com.example.board.dto.board.SaveBoardDTO;
 import com.example.board.service.board.BoardService;
@@ -62,5 +63,15 @@ public class BoardController {
     @GetMapping("/boards/{boardNum}")
     public ResponseEntity<Object> readPreviewBoard(@PathVariable int boardNum){
         return ResponseEntity.ok().body(boardService.readPreviewBoard(boardNum));
+    }
+    @DeleteMapping("/boards")
+    public ResponseEntity<Object> deleteBoard(@RequestBody int boardNum){
+        boardService.deleteBoard(boardNum);
+        return ResponseEntity.ok().body("삭제가 완료되었습니다.");
+    }
+    @PutMapping("/boards")
+    public ResponseEntity<Object> updateBoard(@RequestBody SaveBoardDTO saveBoardDTO, ServletRequest request){
+        //boardService.deleteBoard(deleteBoardDTO,request);
+        return ResponseEntity.ok().body("삭제가 완료되었습니다.");
     }
 }

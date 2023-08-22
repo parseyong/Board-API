@@ -4,12 +4,10 @@ import com.example.board.Repository.BoardRepository;
 import com.example.board.domain.Board;
 import com.example.board.domain.Member;
 import com.example.board.domain.QBoard;
-import com.example.board.domain.QMember;
 import com.example.board.dto.board.*;
-import com.example.board.dto.member.MemberDTO;
+import com.example.board.dto.paging.PagingRequestDTO;
 import com.example.board.exception.NotExistBoardException;
 import com.example.board.mapper.BoardMapper;
-import com.example.board.security.JwtProvider;
 import com.example.board.service.image.ImageService;
 import com.example.board.service.member.MemberService;
 import com.example.board.service.reply.ReplyService;
@@ -23,7 +21,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.servlet.ServletRequest;
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,23 +36,20 @@ public class BoardService {
     private final ImageService imageService;
     private final ReplyService replyService;
     private final PagingService pagingService;
-    private final JwtProvider jwtProvider;
 
     @Autowired
-    public BoardService(BoardRepository boardRepository, EntityManager entityManager,JwtProvider jwtProvider,
-                        MemberService memberService, ImageService imageService, ReplyService replyService,PagingService pagingService){
+    public BoardService(BoardRepository boardRepository, EntityManager entityManager, MemberService memberService,
+                        ImageService imageService, ReplyService replyService,PagingService pagingService){
         this.boardRepository =boardRepository;
         this.entityManager=entityManager;
         this.jpaQueryFactory=new JPAQueryFactory(this.entityManager);
         this.memberService=memberService;
         this.imageService=imageService;
         this.replyService=replyService;
-        this.jwtProvider=jwtProvider;
         this.pagingService=pagingService;
     }
 
-    public int addBoard(SaveBoardDTO saveBoardDTO) throws IOException {
-        MemberDTO memberDTO = memberService.readMember(saveBoardDTO.getEmail());
+    public int addBoard(SaveBoardDTO saveBoardDTO){
         Member member = Member.builder().email(saveBoardDTO.getEmail()).build();
 
         Board board = Board.builder()
@@ -108,5 +102,8 @@ public class BoardService {
         }
         pagingRequestDTO.setPreviewBoardDTOList(previewBoardDTOList);
         return pagingRequestDTO;
+    }
+    public void deleteBoard(int boardNum){
+        boardRepository.deleteById(boardNum);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.board.exception.handler;
 
+import com.example.board.exception.InvalidBoardDeleteException;
 import com.example.board.exception.NotExistBoardException;
 import com.example.board.exception.NotExistMemberException;
 import com.example.board.exception.NotExistPageException;
@@ -17,5 +18,9 @@ public class BoardExceptionHandler {
     @ExceptionHandler(NotExistPageException.class)
     public ResponseEntity<ErrorMsg> notExistPage(NotExistPageException ex){
         return ResponseEntity.status(404).body(new ErrorMsg(ex.getMessage()));
+    }
+    @ExceptionHandler(InvalidBoardDeleteException.class)
+    public ResponseEntity<ErrorMsg> canNotDeletePage(InvalidBoardDeleteException ex){
+        return ResponseEntity.badRequest().body(new ErrorMsg(ex.getMessage()));
     }
 }

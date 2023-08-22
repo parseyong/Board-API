@@ -1,8 +1,7 @@
 package com.example.board.service.board;
 
 import com.example.board.Repository.BoardRepository;
-import com.example.board.dto.board.PagingRequestDTO;
-import com.example.board.exception.NotExistBoardException;
+import com.example.board.dto.paging.PagingRequestDTO;
 import com.example.board.exception.NotExistPageException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +16,10 @@ public class PagingService {
     }
     public PagingRequestDTO getPagingRequestDTO(int currentPageNum){
         int totalPagecnt = findTotalPageCnt();
+
         if(currentPageNum ==0 || currentPageNum>totalPagecnt)
             throw new NotExistPageException("존재하지 않는 페이지입니다.");
+
         int firstPage = findFirstPage(currentPageNum);
 
         return PagingRequestDTO.builder()
