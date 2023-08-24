@@ -118,6 +118,8 @@ public class BoardService {
         return pagingRequestDTO;
     }
     public void deleteBoard(int boardNum){
+        if(!boardRepository.existsById(boardNum))
+            throw new NotExistBoardException("게시글이 존재하지 않습니다.");
         boardRepository.deleteById(boardNum);
     }
     @Transactional

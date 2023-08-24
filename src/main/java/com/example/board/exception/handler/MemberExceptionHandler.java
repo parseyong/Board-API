@@ -1,6 +1,7 @@
 package com.example.board.exception.handler;
 
 import com.example.board.exception.DuplicatedEmailException;
+import com.example.board.exception.InvalidReadMemberException;
 import com.example.board.exception.NotExistMemberException;
 import com.example.board.exception.PasswordIsNotMatchException;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,10 @@ public class MemberExceptionHandler {
 
     @ExceptionHandler(PasswordIsNotMatchException.class)
     public ResponseEntity<ErrorMsg> passwordException(PasswordIsNotMatchException ex){
+        return ResponseEntity.badRequest().body(new ErrorMsg(ex.getMessage()));
+    }
+    @ExceptionHandler(InvalidReadMemberException.class)
+    public ResponseEntity<ErrorMsg> invalidReadMember(InvalidReadMemberException ex){
         return ResponseEntity.badRequest().body(new ErrorMsg(ex.getMessage()));
     }
 }

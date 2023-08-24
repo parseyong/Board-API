@@ -29,9 +29,9 @@ public class ImageController {
         imageService.saveImage(file,boardNum);
         return ResponseEntity.created(null).body("이미지 등록완료");
     }
-    @DeleteMapping("/boards/images/{savedImagePath}")
-    public ResponseEntity<Object> deleteBoardImage(@PathVariable String savedImagePath){
-        imageService.deleteImage(savedImagePath);
+    @DeleteMapping("/boards/images/{savedImageName}")
+    public ResponseEntity<Object> deleteBoardImage(@PathVariable String savedImageName){
+        imageService.deleteImage(savedImageName);
         return ResponseEntity.ok().body("이미지 삭제완료");
     }
 }

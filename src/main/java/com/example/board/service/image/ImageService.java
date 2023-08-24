@@ -5,7 +5,10 @@ import com.example.board.Repository.ImageRepository;
 import com.example.board.domain.Board;
 import com.example.board.domain.Image;
 import com.example.board.dto.image.ImageDTO;
+import com.example.board.exception.InvalidSaveFileException;
 import com.example.board.exception.NotExistBoardException;
+import com.example.board.exception.NotExistFileException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Log4j2
 public class ImageService {
 
     private final ImageRepository imageRepository;
@@ -35,12 +39,14 @@ public class ImageService {
     public void saveImage(MultipartFile file, int boardNum) throws IOException {
 
         Optional<Board> result = boardRepository.findById(boardNum);
-        if(result.isEmpty())
-            throw new NotExistBoardException("존재하지 않는 게시글입니다.");
+
         Board board = result.get();
         // 원래 파일 이름 추출
         String originName = file.getOriginalFilename();
+        if(originName.length() <= 0 || originName ==null)
+            throw new InvalidSaveFileException("파일을 저장할 수 없습니다.");
 
+        log.info(originName);
         // 파일 이름으로 쓸 uuid 생성, 동일한 파일명이 들어왔을 때 파일명의 중복을 피하기위해 UUID를 사용.
         String uuid = UUID.randomUUID().toString();
 
@@ -78,6 +84,8 @@ public class ImageService {
         return imageDTOList;
     }
     public void deleteImage(String savedImageName){
+        if(!imageRepository.existsById(savedImageName))
+            throw new NotExistFileException("파일이 존재하지 않습니다.");
         imageRepository.deleteById(savedImageName);
     }
 }

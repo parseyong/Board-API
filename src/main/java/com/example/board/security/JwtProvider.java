@@ -24,7 +24,7 @@ public class JwtProvider {
 
     // 되도록 시크릿키는 유추하기 어렵게 복잡하게 설정하는 것이 좋다.
     private String secretKey = "Adfaoidalksdhcpxzjhpdhfpdkoxaodfid";
-    private long validTokenTime = 10 * 60 * 1000L; // 토큰 유효시간 10분으로 설정
+    private long validTokenTime = 30 * 60 * 1000L; // 토큰 유효시간 10분으로 설정 , (테스트를 수월하게 하기위해 30분으로 재설정.)
 
     private final MemberDetailsService memberDetailsService;
 
