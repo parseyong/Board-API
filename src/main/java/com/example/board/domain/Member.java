@@ -19,7 +19,7 @@ public class Member extends  BaseEntity{
     String name;
     @Column
     String password;
-    @Column(columnDefinition = "ROLE_ADMIN")
+    @Column
     String roleName;
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
