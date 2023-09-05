@@ -49,8 +49,11 @@ public class SecurityConfig {
                 .accessDeniedHandler(new CustomAccessDeniedHandler()) //인가과정에서 예외발생시 핸들러지정
 
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
+                .and()
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
+                http.csrf().disable();
          /*
         	rest api에서 CSRF를 disable하는 이유
 			rest api를 이용한 서버라면, session 기반 인증과는 다르게 stateless하기 때문에 서버에 인증정보를 보관하지 않는다.
@@ -58,7 +61,7 @@ public class SecurityConfig {
             악의적인 csrf공격 코드에는 이러한 토큰이 포함되어있지 않기때문에 악의적인 공격이 인증실패로인해 실행되지 않는다.
             따라서 서버에 인증정보를 저장하지 않기 때문에 굳이 불필요한 csrf 코드들을 작성할 필요가 없다.
         */
-        http.csrf().disable();
+        //http.csrf().disable();
 
         return http.build();
     }
