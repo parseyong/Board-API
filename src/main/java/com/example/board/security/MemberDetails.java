@@ -1,8 +1,6 @@
 package com.example.board.security;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,6 +8,8 @@ import java.util.Collection;
 
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class MemberDetails implements UserDetails {
 
