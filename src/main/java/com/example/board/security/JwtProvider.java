@@ -4,8 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,7 +17,6 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
-@RequiredArgsConstructor
 @Log4j2
 @Component
 public class JwtProvider {
@@ -25,8 +24,12 @@ public class JwtProvider {
     // 되도록 시크릿키는 유추하기 어렵게 복잡하게 설정하는 것이 좋다.
     private String secretKey = "Adfaoidalksdhcpxzjhpdhfpdkoxaodfid";
     private long validTokenTime = 30 * 60 * 1000L; // 토큰 유효시간 10분으로 설정 , (테스트를 수월하게 하기위해 30분으로 재설정.)
-
     private final MemberDetailsService memberDetailsService;
+    @Autowired
+    public JwtProvider(MemberDetailsService memberDetailsService){
+        this.memberDetailsService=memberDetailsService;
+    }
+
 
     /*
         시크릿키를 인코딩한 뒤 결과값을 String형태로 반환하여 시크릿키에 저장.
