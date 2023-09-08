@@ -14,7 +14,6 @@ import javax.validation.constraints.NotEmpty;
 public class MemberDeleteDTO {
 
     private String email;
-    @NotEmpty
     @NotBlank
     private String password;
 

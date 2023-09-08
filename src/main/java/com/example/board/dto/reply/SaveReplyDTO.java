@@ -14,7 +14,6 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class SaveReplyDTO {
     @NotBlank
-    @NotEmpty
     private String content;
 
     private int boardNum;

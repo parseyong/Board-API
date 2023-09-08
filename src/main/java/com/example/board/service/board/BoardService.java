@@ -109,8 +109,8 @@ public class BoardService {
 
         List<Board> result = jpaQueryFactory.select(qBoard)
                 .from(qBoard)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset()) // 시작지점
+                .limit(pageable.getPageSize()) //페이지의 크기
                 .fetch();
         List<PreviewBoardDTO> previewBoardDTOList=boardToPreviewBoardDTO(result);
 

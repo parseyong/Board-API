@@ -13,7 +13,6 @@ import javax.validation.constraints.NotEmpty;
 @ToString
 public class UpdateReplyDTO {
     @NotBlank
-    @NotEmpty
     private String content;
 
     private int replyNum;

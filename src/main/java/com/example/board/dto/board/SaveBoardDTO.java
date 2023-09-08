@@ -19,10 +19,8 @@ import java.util.List;
 // 게시글 등록,수정할 떄 사용되는 dto
 public class SaveBoardDTO {
 
-    @NotEmpty
     @NotBlank
     private String title;
-    @NotEmpty
     @NotBlank
     private String content;
 }

@@ -33,7 +33,7 @@ public class BoardController {
         받은 pk값과 파일을통해 이미지를 업로드한다.
      */
     @PostMapping("/boards")
-    public ResponseEntity<Object> addBoardContent(@RequestBody @Valid SaveBoardDTO saveBoardDTO, BindingResult bindingResult,ServletRequest request) throws IOException {
+    public ResponseEntity<Object> addBoardContent(@RequestBody @Valid SaveBoardDTO saveBoardDTO,BindingResult bindingResult,ServletRequest request) throws IOException {
 
         if (bindingResult.hasErrors()) {
             // 에러 정보를 Map에 담아서 응답으로 반환

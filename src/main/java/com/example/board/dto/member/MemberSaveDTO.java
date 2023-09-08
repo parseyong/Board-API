@@ -14,13 +14,10 @@ import javax.validation.constraints.NotEmpty;
 public class MemberSaveDTO {
 
     private String email;
-    @NotEmpty
     @NotBlank
     private String name;
-    @NotEmpty
     @NotBlank
     private String password;
-    @NotEmpty
     @NotBlank
     private String roleName;
 }
