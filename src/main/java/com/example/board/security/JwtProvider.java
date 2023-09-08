@@ -68,7 +68,7 @@ public class JwtProvider {
      */
     public Authentication getAuthentication(String token) {
         MemberDetails memberDetails = memberDetailsService.loadUserByUsername(this.getUsername(token));
-        return new UsernamePasswordAuthenticationToken(memberDetails, "", memberDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(memberDetails.getUsername(), memberDetails.getPassword(), memberDetails.getAuthorities());
     }
     /*
         토큰을 받아 sub(username)값을 추출하는 메소드.

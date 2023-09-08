@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PagingService {
-    private BoardRepository boardRepository;
+    private final BoardRepository boardRepository;
 
     @Autowired
     public PagingService(BoardRepository boardRepository){

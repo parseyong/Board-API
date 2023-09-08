@@ -48,6 +48,12 @@ public class SecurityConfig {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
+                /*
+                    UsernamePasswordAuthenticationFilter 전에 JwtAutenticationFilter를 실행
+                    UsernamePasswordAuthenticationFilter는 form형식의 인증을 할 때 인증정보가 없거나 틀리면로그인페이지로 리다이렉트하는 필터이다.
+                    따라서 jwt인증필터를 이 필터 앞에서 실행시켜 토큰에 문제가 있으면 예외를 던져야한다.
+                    jwt 토큰을 사용하면 UsernamePasswordAuthenticaitionFilter는 생략된다.
+                */
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
 
