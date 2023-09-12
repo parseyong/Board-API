@@ -27,11 +27,10 @@ public class BoardController {
         this.boardService=boardService;
     }
     /*
-        더욱 rest한 api를 만들기 위해 이미지업로드와 게시글 등록로직을 분리하여 처리하였다.
-        이렇게되면 @RequestPart를 사용하지 않아 saveBoardDTO의 데이터를 http body를 통해 전달할 수 있다.
-        클라이언트에서 먼저 게시글등록 요청을 보내고 응답으로 게시글 pk값을 보낸다.
-        받은 pk값과 파일을통해 이미지를 업로드한다.
-     */
+        @RequestPart를 통해 이미지 파일과 json포멧의 데이터를 같이 보낼 수 있다.
+        이미지와 게시글등록요청 핸들러를 분리한 이유는 게시글을 등록할 때 이미지는 등록하지 않거나
+        수정할 때 게시글의 내용과 이미지중 하나만 수정할 경우가 있기때문에 각 요청을 분리하여 처리하였다.
+    */
     @PostMapping("/boards")
     public ResponseEntity<Object> addBoardContent(@RequestBody @Valid SaveBoardDTO saveBoardDTO,BindingResult bindingResult,ServletRequest request) throws IOException {
 
