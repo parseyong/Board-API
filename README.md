@@ -9,7 +9,7 @@ https://documenter.getpostman.com/view/28802773/2s9Y5VSiRN
 
 # 수정할 것
 1. @Builder을 class선언이 아닌 constructor선언으로 변경
-2. JwtFilter에서 GenericFilter를 BeanOncePerRequestFilter로 변경
+2. JwtFilter에서 GenericFilter를 BeanOncePerRequestFilter로 변경 (완료)
 3. update문을 처리하기 위해 엔티티객체에 필드값을 변경하는 메소드를 생성하여 필드값을 수정하도록 변경
 
 # 사용 기술스택
