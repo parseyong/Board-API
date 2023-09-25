@@ -6,11 +6,9 @@ import com.example.board.domain.Member;
 import com.example.board.dto.member.MemberInfoDTO;
 import com.example.board.dto.member.MemberDeleteDTO;
 import com.example.board.dto.member.MemberSaveDTO;
-import com.example.board.exception.DuplicatedEmailException;
-import com.example.board.exception.InvalidReadMemberException;
-import com.example.board.exception.NotExistMemberException;
-import com.example.board.exception.PasswordIsNotMatchException;
+import com.example.board.exception.*;
 import com.example.board.security.JwtProvider;
+import com.example.board.service.CoolSMS.PhoneAuthenticationService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,15 +28,23 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
+    private final PhoneAuthenticationService phoneAuthenticationService;
 
     @Autowired
-    public MemberService(MemberRepository memberRepository,PasswordEncoder passwordEncoder, JwtProvider jwtProvider){
+    public MemberService(MemberRepository memberRepository,PasswordEncoder passwordEncoder, JwtProvider jwtProvider,
+                         PhoneAuthenticationService phoneAuthenticationService){
         this.memberRepository =memberRepository;
         this.passwordEncoder=passwordEncoder;
         this.jwtProvider=jwtProvider;
+        this.phoneAuthenticationService=phoneAuthenticationService;
     }
 
     public void saveMember(MemberSaveDTO memberSaveDTO){
+
+        String phoneNum = memberSaveDTO.getPhoneNum().toString();
+        if(!phoneAuthenticationService.isAuthenticatedNum(phoneNum)){
+            throw new NotAuthenticatedNumberException("전화번호 인증이 되지 않았습니다.");
+        }
 
         Optional<Member> result = memberRepository.findById(memberSaveDTO.getEmail());
         if(result.isPresent())

@@ -35,6 +35,7 @@ public class SecurityConfig {
         http
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/members/sms","/members/authentication").permitAll()
                 .antMatchers(HttpMethod.POST,"/members").permitAll()
                 .antMatchers("/manager").hasRole("MANAGER")
                 .anyRequest().authenticated()

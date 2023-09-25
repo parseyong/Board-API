@@ -4,6 +4,7 @@ import com.example.board.dto.login.LoginDTO;
 import com.example.board.dto.member.MemberInfoDTO;
 import com.example.board.dto.member.MemberDeleteDTO;
 import com.example.board.dto.member.MemberSaveDTO;
+import com.example.board.service.CoolSMS.PhoneAuthenticationService;
 import com.example.board.service.login.LoginService;
 import com.example.board.service.member.MemberService;
 import lombok.extern.log4j.Log4j2;

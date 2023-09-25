@@ -20,4 +20,6 @@ public class MemberSaveDTO {
     private String password;
     @NotBlank
     private String roleName;
+    @NotBlank
+    private String phoneNum;
 }
