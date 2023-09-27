@@ -4,6 +4,7 @@ import com.example.board.dto.login.LoginDTO;
 import com.example.board.dto.member.MemberInfoDTO;
 import com.example.board.dto.member.MemberDeleteDTO;
 import com.example.board.dto.member.MemberSaveDTO;
+import com.example.board.dto.member.MemberUpdateDTO;
 import com.example.board.service.CoolSMS.PhoneAuthenticationService;
 import com.example.board.service.login.LoginService;
 import com.example.board.service.member.MemberService;
@@ -73,7 +74,7 @@ public class MemberController {
         return ResponseEntity.ok().body("회원 탈퇴 완료");
     }
     @PatchMapping("/members/{email}")
-    public ResponseEntity<Object> updateMember(@PathVariable String email,@RequestBody @Valid MemberSaveDTO memberSaveDTO,
+    public ResponseEntity<Object> updateMember(@PathVariable String email,@RequestBody @Valid MemberUpdateDTO memberUpdateDTO,
                                                BindingResult bindingResult){
 
         if (bindingResult.hasErrors()) {
@@ -82,9 +83,9 @@ public class MemberController {
             bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
             return ResponseEntity.badRequest().body(errors);
         }
-        memberSaveDTO.setEmail(email);
-        memberService.updateMember(memberSaveDTO);
-        return ResponseEntity.ok().body(memberSaveDTO);
+        memberUpdateDTO.setEmail(email);
+        memberService.updateMember(memberUpdateDTO);
+        return ResponseEntity.ok().body(memberUpdateDTO);
     }
 
 }

@@ -2,9 +2,7 @@ package com.example.board.service.CoolSMS;
 
 import com.example.board.dto.CoolSMS.AuthenticationMessageDto;
 import com.example.board.dto.CoolSMS.PhoneNumDto;
-import com.example.board.dto.member.MemberSaveDTO;
 import com.example.board.exception.AuthenticationNumIsNotMatchException;
-import com.example.board.exception.NotAuthenticatedNumberException;
 import lombok.extern.log4j.Log4j2;
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;

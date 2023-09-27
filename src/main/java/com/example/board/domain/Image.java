@@ -1,6 +1,5 @@
 package com.example.board.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Image {
 
     @Id
@@ -26,5 +23,11 @@ public class Image {
     @JoinColumn(name = "board_boardNum")
     private Board board;
 
-
+    @Builder
+    public Image(String savedName,String originalName,String savedPath,Board board){
+        this.savedName=savedName;
+        this.originalName=originalName;
+        this.savedPath=savedPath;
+        this.board=board;
+    }
 }

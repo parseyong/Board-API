@@ -6,6 +6,7 @@ import com.example.board.domain.Member;
 import com.example.board.dto.member.MemberInfoDTO;
 import com.example.board.dto.member.MemberDeleteDTO;
 import com.example.board.dto.member.MemberSaveDTO;
+import com.example.board.dto.member.MemberUpdateDTO;
 import com.example.board.exception.*;
 import com.example.board.security.JwtProvider;
 import com.example.board.service.CoolSMS.PhoneAuthenticationService;
@@ -58,13 +59,14 @@ public class MemberService {
 
         memberRepository.save(member);
     }
-    public void updateMember(MemberSaveDTO memberSaveDTO){
+    public void updateMember(MemberUpdateDTO memberUpdateDTO){
 
-        Member member = Member.builder().email(memberSaveDTO.getEmail())
-                .name(memberSaveDTO.getName())
-                .password(passwordEncoder.encode(memberSaveDTO.getPassword()))
-                .roleName(memberSaveDTO.getRoleName())
-                .build();
+        Optional<Member> result = memberRepository.findById(memberUpdateDTO.getEmail());
+        if(result.isEmpty())
+            throw new NotExistMemberException("회원이 존재하지 않습니다.");
+        Member member= result.get();
+        member.changeName(memberUpdateDTO.getName());
+        member.changePassword(passwordEncoder.encode(memberUpdateDTO.getPassword()));
 
         memberRepository.save(member);
     }

@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.example.board.domain.QBoard.board;
+
 @Service
 @Log4j2
 public class BoardService {
@@ -104,7 +106,7 @@ public class BoardService {
     @Transactional
     public PagingRequestDTO readPreviewBoard(int pageNum){
         PagingRequestDTO pagingRequestDTO = pagingService.getPagingRequestDTO(pageNum);
-        QBoard qBoard=QBoard.board;
+        QBoard qBoard= board;
         Pageable pageable= PageRequest.of(pageNum-1,10);
 
         List<Board> result = jpaQueryFactory.select(qBoard)
@@ -120,6 +122,7 @@ public class BoardService {
     public void deleteBoard(int boardNum){
         if(!boardRepository.existsById(boardNum))
             throw new NotExistBoardException("게시글이 존재하지 않습니다.");
+
         boardRepository.deleteById(boardNum);
     }
     @Transactional
@@ -129,13 +132,15 @@ public class BoardService {
         Optional<Member> result = memberRepository.findById(email);
         if(result.isEmpty())
             throw new NotExistMemberException("존재하지 않는 회원입니다.");
-        Member member = result.get();
-        Board board = Board.builder()
-                .content(updateBoardDTO.getContent())
-                .title(updateBoardDTO.getTitle())
-                .member(member)
-                .boardNum(updateBoardDTO.getBoardNum())
-                .build();
+
+        Optional<Board> boardResult = boardRepository.findById(updateBoardDTO.getBoardNum());
+        if(boardResult.isEmpty())
+            throw new NotExistBoardException("존재하지 않는 게시글입니다.");
+
+        Board board = boardResult.get();
+        board.changeTitle(updateBoardDTO.getTitle());
+        board.changeContent(updateBoardDTO.getContent());
+
         Board savedBoard =boardRepository.save(board);
         return savedBoard.getBoardNum();
     }

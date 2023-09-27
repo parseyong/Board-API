@@ -7,9 +7,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @ToString(exclude = "board")
 public class Member extends  BaseEntity{
 
@@ -24,5 +22,21 @@ public class Member extends  BaseEntity{
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Board> board;
+
+    @Builder
+    public Member(String email,String name,String password,String roleName,List<Board> board){
+        this.email=email;
+        this.name=name;
+        this.password=password;
+        this.roleName=roleName;
+        this.board=board;
+    }
+
+    public void changeName(String name){
+        this.name=name;
+    }
+    public void changePassword(String password){
+        this.password=password;
+    }
 
 }

@@ -67,7 +67,7 @@ public class ImageService {
         file.transferTo(new File(savedPath));
 
         // 데이터베이스에 파일 정보 저장 , 기존파일명,저장경로,uuid명 을 필드로 가지는 엔티티를 db에 저장
-        Image savedFile = imageRepository.save(fileInDatabase);
+        imageRepository.save(fileInDatabase);
     }
     public List<ImageDTO> readImage(Board board){
         List<Image> imageList = board.getImage();

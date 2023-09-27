@@ -79,13 +79,8 @@ public class ReplyService {
         Optional<Reply> result = replyRepository.findById(updateReplyDTO.getReplyNum());
         if(result.isEmpty())
             throw new NotExistReplyException("존재하지 않는 댓글입니다.");
-        Reply originReply = result.get();
-        Reply reply = Reply.builder()
-                .board(originReply.getBoard())
-                .content(updateReplyDTO.getContent())
-                .replyNum(originReply.getReplyNum())
-                .replyler(originReply.getReplyler())
-                .build();
+        Reply reply = result.get();
+        reply.changeContent(updateReplyDTO.getContent());
         replyRepository.save(reply);
     }
     public void deleteReply(int replyNum){

@@ -6,9 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @ToString(exclude = "board")
 public class Reply extends  BaseEntity{
 
@@ -23,4 +21,14 @@ public class Reply extends  BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_boardNum")
     private Board board;
+
+    @Builder
+    public Reply(String content,String replyler,Board board){
+        this.content=content;
+        this.replyler=replyler;
+        this.board=board;
+    }
+    public void changeContent(String content){
+        this.content=content;
+    }
 }

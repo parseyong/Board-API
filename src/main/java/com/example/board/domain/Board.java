@@ -8,9 +8,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @ToString(exclude = "member")
 public class Board extends  BaseEntity{
 
@@ -32,8 +30,20 @@ public class Board extends  BaseEntity{
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Image> image;
 
-    public void addMember(Member member){
+    @Builder
+    public Board(int boardNum,String title,String content,Member member,List<Reply> reply,List<Image> image){
+        this.boardNum=boardNum;
+        this.title=title;
+        this.content=content;
         this.member=member;
+        this.reply=reply;
+        this.image=image;
+    }
+    public void changeTitle(String title){
+        this.title=title;
+    }
+    public void changeContent(String content){
+        this.content=content;
     }
 
 }
